@@ -23,7 +23,7 @@ function generateRandomColor() {
 
     // Choose a readable text color
     const brightness = (red * 0.299 + green * 0.587 + blue * 0.114);
-    document.body.style.color = brightness > 186 ? "#000000" : "#FFFFFF";
+    document.body.style.color = brightness > 128 ? "#000000" : "#FFFFFF";
 
     // Save and display the RGB value
     currentRgb = rgbColor;
