@@ -1,3 +1,4 @@
+
 // Get the HTML elements
 const colorButton = document.getElementById("colorbutton");
 const rgbDisplay = document.getElementById("rgb");
@@ -21,9 +22,24 @@ function generateRandomColor() {
     // Update the background color
     document.body.style.background = rgbColor;
 
-    // Choose a readable text color
-    const brightness = (red * 0.299 + green * 0.587 + blue * 0.114);
-    document.body.style.color = brightness > 128 ? "#000000" : "#FFFFFF";
+    // Convert RGB values to linear RGB
+    const rgb = [red, green, blue].map(value => {
+        const channel = value / 255;
+
+        return channel <= 0.04045
+            ? channel / 12.92
+            : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+
+    // Calculate relative luminance
+    const luminance =
+        rgb[0] * 0.2126 +
+        rgb[1] * 0.7152 +
+        rgb[2] * 0.0722;
+
+    // Choose black or white text based on contrast
+    document.body.style.color =
+        luminance > 0.179 ? "#000000" : "#FFFFFF";
 
     // Save and display the RGB value
     currentRgb = rgbColor;
@@ -31,9 +47,9 @@ function generateRandomColor() {
     rgbDisplay.textContent = `RGB: ${rgbColor}`;
 
     // Convert RGB values to HEX
-    const redHex = red.toString(16).toUpperCase().padStart(2, '0');
-    const greenHex = green.toString(16).toUpperCase().padStart(2, '0');
-    const blueHex = blue.toString(16).toUpperCase().padStart(2, '0');
+    const redHex = red.toString(16).toUpperCase().padStart(2, "0");
+    const greenHex = green.toString(16).toUpperCase().padStart(2, "0");
+    const blueHex = blue.toString(16).toUpperCase().padStart(2, "0");
 
     const hexColor = `#${redHex}${greenHex}${blueHex}`;
 
